@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# by Maximilian Ahrens | Oxford 2021
 
 #=================================
 # Imports
@@ -30,33 +31,24 @@ parser.add_argument("--start", type=int, default=None, help="choose which speake
 parser.add_argument("--end", type=int, default=None, help="choose which speaker position to end on.")
 args = parser.parse_args()
 
-"""
-class TestFlags():
-    def __init__(self):
-        self.test = 0
-args = TestFlags()
-args.start = None
-args.end = None
-"""
-
 #=================================
 # Define paths and url
 #=================================
-user_path = os.getcwd().split('code')[0]
-download_path = os.path.join(user_path,'speech_downloads')
+url = 'https://fraser.stlouisfed.org/series/statements-speeches-federal-open-market-committee-participants-3761'
+
+user_path = os.getcwd()
+download_path = os.path.join(user_path,'output')
+
 try:
     os.makedirs(download_path)
     print(f'creating new download folder:\n{download_path}')
 except FileExistsError:
     print(f'using existing download folder:\n{download_path}')
 
-    
-url = 'https://fraser.stlouisfed.org/series/statements-speeches-federal-open-market-committee-participants-3761'
-
 if sys.platform == "darwin":
-    input_list = pd.read_csv(os.path.join(user_path,'code','input_list.csv'), header=0, index_col=0)
+    input_list = pd.read_csv(os.path.join(user_path,'input','input_list.csv'), header=0, index_col=0)
 elif sys.platform == "linux":
-    input_list = pd.read_csv(os.path.join(user_path,'code','input_list.csv'), header=0, index_col=0)
+    input_list = pd.read_csv(os.path.join(user_path,'input','input_list.csv'), header=0, index_col=0)
 
 if args.start is not None or args.end is not None:
     if args.end is None:
@@ -69,7 +61,6 @@ if args.start is not None or args.end is not None:
         assert isinstance(args.start,int) and isinstance(args.end,int)
         input_list = input_list[args.start:args.end]
 
-    
 #========================================
 # Define functions
 #========================================
@@ -88,7 +79,7 @@ def main(url, input_list):
         time.sleep(random.randint(min_sec,max_sec)/100)
     
     
-    # iterature through speakers
+    # iterate through speakers
     for p,n in zip(input_list.index,input_list.name):
         try:
             speaker = n.replace('Statements and Speeches of ','')
@@ -100,7 +91,6 @@ def main(url, input_list):
         speaker_path = os.path.join(download_path,speaker)
         print(f'\n\n\n#####downloading speeches by:{speaker,speaker_pos} of {len(input_list.name)}#####\n')
         
-    
         # start selenium search for selected speaker
         driver = start_driver()
         driver.get(url)
