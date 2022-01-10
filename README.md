@@ -1,6 +1,6 @@
 # Python script to download FOMC speeches
 
-## Requirements:
+## Key requirements:
 - Python 3
 - Selenium for Python (https://selenium-python.readthedocs.io/)
 - Chromedriver that matches version of your Chrome browser (https://chromedriver.chromium.org/downloads)
